@@ -6,29 +6,8 @@ jobs:
   automate_invite:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if user is already a member
-        id: check_membership
-        run: |
-          # Extract username from the issue title or body
-          USERNAME=$(echo "${{ github.event.issue.title }}" | sed -E 's/.*@([[:alnum:]_-]+).*/\1/')
-          if [ -z "$USERNAME" ]; then
-            USERNAME=$(echo "${{ github.event.issue.body }}" | sed -E 's/.*@([[:alnum:]_-]+).*/\1/')
-          fi
-          
-          # Check if the user is already a member
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/orgs/GDSC-RVTTI/members/$USERNAME")
-          
-          if [ "$HTTP_STATUS" -eq 204 ]; then
-            echo "User $USERNAME is already a member of GDSC-RVTTI. Skipping invitation."
-            echo "::set-output name=skip_invitation::true"
-          else
-            echo "User $USERNAME is not a member. Proceeding with invitation."
-            echo "::set-output name=skip_invitation::false"
-          fi
-
       - name: Invite on label
-        if: steps.check_membership.outputs.skip_invitation != 'true'
-        uses: vj-abigo/invite-on-label@v1.4
+        uses: vj-abigo/invite-on-label@v1.2
         with:
           organization: GDSC-RVTTI
           label: Invitation to the community
