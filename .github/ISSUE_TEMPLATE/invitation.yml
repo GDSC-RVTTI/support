@@ -1,7 +1,7 @@
 name: Invitation to GDSC RVTTI 
 description: I would like to be part of the awesome community
 title: "Please invite me to GDSC RVTTI community"
-labels: [Invitation to the community]
+labels: [invite me to the organisation]
 body:
   - type: input
     id: name
