@@ -16,7 +16,9 @@ jobs:
           fi
           
           # Check if the user is already a member
-          if curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/orgs/GDSC-RVTTI/members/$USERNAME" | grep -q 200; then
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/orgs/GDSC-RVTTI/members/$USERNAME")
+          
+          if [ "$HTTP_STATUS" -eq 204 ]; then
             echo "User $USERNAME is already a member of GDSC-RVTTI. Skipping invitation."
             echo "::set-output name=skip_invitation::true"
           else
